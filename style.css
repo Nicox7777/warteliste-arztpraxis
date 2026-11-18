@@ -1,20 +1,34 @@
+:root {
+    --bg: #f0f6fb; --surface: #ffffff; --fg: #142433; --muted: #5b6f80;
+    --accent: #1f6fb2; --accent-fg: #ffffff; --line: #d6e3ee; --item: #e3f0fa;
+    --font-display: "Space Grotesk", system-ui, sans-serif;
+    --font-body: "Inter", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1a24; --surface: #16242f; --fg: #e4eef6; --muted: #93a8b9;
+        --accent: #5aa7e6; --accent-fg: #0b1620; --line: #263a4a; --item: #1c3142;
+        color-scheme: dark;
+    }
+}
+[hidden] { display: none !important; }
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f8ff;
-    padding: 30px;
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+    padding: 40px 16px;
 }
-input, button {
-    padding: 10px;
-    font-size: 16px;
-    margin: 5px;
-}
-ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-li {
-    background-color: #e0f4ff;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
-}
+main { max-width: 560px; margin: 0 auto; display: grid; gap: 28px; }
+h1, h2 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+h1 { font-size: 1.9rem; line-height: 1.2; }
+h2 { font-size: 1.2rem; display: flex; align-items: baseline; gap: 10px; }
+.count { font-family: var(--font-body); font-size: .85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.lead { margin: 8px 0 0; color: var(--muted); }
+form { display: flex; flex-wrap: wrap; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+label { flex-basis: 100%; font-size: .8rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+input { flex: 1 1 200px; min-width: 0; padding: 12px; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; }
+button { padding: 12px 20px; font: inherit; font-weight: 600; color: var(--accent-fg); background: var(--accent); border: 0; border-radius: 6px; cursor: pointer; }
+input:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+ol { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; counter-reset: pos; }
+li { counter-increment: pos; display: flex; gap: 14px; align-items: center; background: var(--item); padding: 12px 14px; border-radius: 6px; overflow-wrap: anywhere; }
+li::before { content: counter(pos); font-family: var(--font-display); font-weight: 600; color: var(--accent); min-width: 1.5em; font-variant-numeric: tabular-nums; }
+.empty { color: var(--muted); margin: 12px 0 0; }

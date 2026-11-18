@@ -2,19 +2,30 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Warteliste Arztpraxis</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<main>
+    <header>
+        <h1>Digitale Warteliste</h1>
+        <p class="lead">Bitte tragen Sie Ihren Namen ein. Sie werden in der Reihenfolge der Anmeldung aufgerufen.</p>
+    </header>
 
-<h1>Digitale Warteliste – Bitte Namen eintragen</h1>
+    <form id="addForm">
+        <label for="nameInput">Ihr Name</label>
+        <input type="text" id="nameInput" placeholder="z. B. Anna Schmidt" autocomplete="name">
+        <button type="submit">Eintragen</button>
+    </form>
 
-<input type="text" id="nameInput" placeholder="Ihr Name">
-<button onclick="addPatient()">Eintragen</button>
-
-<h2>Warteliste</h2>
-<ul id="patientList"></ul>
-
+    <section>
+        <h2>Warteliste <span class="count" id="count">0 Personen</span></h2>
+        <p class="empty" id="empty">Noch niemand eingetragen.</p>
+        <ol id="patientList"></ol>
+    </section>
+</main>
 <script src="script.js"></script>
 </body>
 </html>
