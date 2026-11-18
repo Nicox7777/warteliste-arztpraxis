@@ -48,7 +48,21 @@
     <h2 id="prayer-h">Gebete</h2>
     <p class="lead">Worte, die Christen seit Generationen beten.</p>
     <div class="prayers">
-      <details open>
+      <details id="morning">
+        <summary><span>Morgensegen <small>· Martin Luther</small></span></summary>
+        <div class="prayer">
+          <p>Ich danke dir, mein himmlischer Vater, durch Jesus Christus, deinen lieben Sohn, dass du mich diese Nacht vor allem Schaden und Gefahr behütet hast, und bitte dich, du wollest mich diesen Tag auch behüten vor Sünden und allem Übel, dass dir all mein Tun und Leben gefalle.</p>
+          <p>Denn ich befehle mich, meinen Leib und Seele und alles in deine Hände. Dein heiliger Engel sei mit mir, dass der böse Feind keine Macht an mir finde. Amen.</p>
+        </div>
+      </details>
+      <details id="evening">
+        <summary><span>Abendsegen <small>· Martin Luther</small></span></summary>
+        <div class="prayer">
+          <p>Ich danke dir, mein himmlischer Vater, durch Jesus Christus, deinen lieben Sohn, dass du mich diesen Tag gnädiglich behütet hast, und bitte dich, du wollest mir vergeben alle meine Sünde, wo ich Unrecht getan habe, und mich diese Nacht auch gnädiglich behüten.</p>
+          <p>Denn ich befehle mich, meinen Leib und Seele und alles in deine Hände. Dein heiliger Engel sei mit mir, dass der böse Feind keine Macht an mir finde. Amen.</p>
+        </div>
+      </details>
+      <details>
         <summary><span>Vaterunser <small>· Matthäus 6</small></span></summary>
         <div class="prayer">
           <p>Vater unser im Himmel,<br>geheiligt werde dein Name.<br>Dein Reich komme.<br>Dein Wille geschehe,<br>wie im Himmel, so auf Erden.</p>
@@ -84,6 +98,18 @@
         </div>
       </details>
     </div>
+  </section>
+
+  <section aria-labelledby="req-h">
+    <h2 id="req-h">Meine Anliegen</h2>
+    <p class="lead">Schreiben Sie auf, wofür Sie beten möchten. Die Einträge bleiben nur auf diesem Gerät und sind für niemanden sonst sichtbar.</p>
+    <form class="req-form" id="reqForm">
+      <label for="reqInput" class="sr">Neues Anliegen</label>
+      <input type="text" id="reqInput" placeholder="z. B. Für meine Mutter, die im Krankenhaus liegt" maxlength="200">
+      <button class="primary" type="submit">Hinzufügen</button>
+    </form>
+    <p class="req-empty" id="reqEmpty">Noch keine Anliegen. Ihr erstes Anliegen erscheint hier.</p>
+    <ul class="req-list" id="reqList"></ul>
   </section>
 
   <section aria-labelledby="verses-h">

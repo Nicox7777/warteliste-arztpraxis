@@ -69,4 +69,19 @@ summary small { font-weight: 400; color: var(--muted); }
 .verses p { font-size: 1.3rem; line-height: 1.5; margin: 0; }
 .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
 
+/* Anliegen */
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.req-form { display: flex; gap: 10px; flex-wrap: wrap; }
+.req-form input { flex: 1 1 240px; min-width: 0; padding: 10px 14px; font: inherit; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; }
+.req-form input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.req-empty { color: var(--muted); font-style: italic; margin: 16px 0 0; }
+.req-list { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 8px; }
+.req-list li { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.req-list .txt { flex: 1; min-width: 0; overflow-wrap: anywhere; font-family: var(--font-scripture); font-size: 1.15rem; }
+.req-list .date { display: block; font-family: var(--font-ui); font-size: .75rem; color: var(--muted); }
+.req-list li.done .txt { color: var(--muted); }
+.req-list li.done .mark { color: var(--accent); font-weight: 600; }
+.req-list button { padding: 6px 12px; font-size: .85rem; }
+.req-list .del { border: 0; background: none; color: var(--muted); }
+
 footer { color: var(--muted); font-size: .8rem; text-align: center; }

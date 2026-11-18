@@ -11,8 +11,58 @@ const VERSES = [
   { t: "Und der Friede Gottes, welcher höher ist denn alle Vernunft, bewahre eure Herzen und Sinne in Christo Jesu.", r: "Philipper 4,7", k: "Frieden" },
   { t: "Von allen Seiten umgibst du mich und hältst deine Hand über mir.", r: "Psalm 139,5", k: "Trost" },
   { t: "Danket dem HERRN; denn er ist freundlich, und seine Güte währet ewiglich.", r: "Psalm 106,1", k: "Dank" },
-  { t: "Bittet, so wird euch gegeben; suchet, so werdet ihr finden; klopfet an, so wird euch aufgetan.", r: "Matthäus 7,7", k: "Gebet" }
+  { t: "Bittet, so wird euch gegeben; suchet, so werdet ihr finden; klopfet an, so wird euch aufgetan.", r: "Matthäus 7,7", k: "Gebet" },
+  { t: "Wenn aber du betest, so gehe in dein Kämmerlein und schließ die Tür zu und bete zu deinem Vater im Verborgenen.", r: "Matthäus 6,6", k: "Gebet" },
+  { t: "Sei stille dem HERRN und warte auf ihn.", r: "Psalm 37,7", k: "Stille" },
+  { t: "Ich hebe meine Augen auf zu den Bergen, von welchen mir Hilfe kommt. Meine Hilfe kommt vom HERRN, der Himmel und Erde gemacht hat.", r: "Psalm 121,1–2", k: "Trost" },
+  { t: "Alle eure Sorge werfet auf ihn; denn er sorgt für euch.", r: "1. Petrus 5,7", k: "Trost" },
+  { t: "Lobe den HERRN, meine Seele, und vergiß nicht, was er dir Gutes getan hat!", r: "Psalm 103,2", k: "Dank" },
+  { t: "Ich bin das Licht der Welt; wer mir nachfolgt, der wird nicht wandeln in der Finsternis, sondern wird das Licht des Lebens haben.", r: "Johannes 8,12", k: "Glaube" },
+  { t: "Es ist aber der Glaube eine gewisse Zuversicht des, das man hofft, und ein Nichtzweifeln an dem, das man nicht sieht.", r: "Hebräer 11,1", k: "Glaube" },
+  { t: "Ich glaube, lieber Herr; hilf meinem Unglauben!", r: "Markus 9,24", k: "Glaube" },
+  { t: "Nun aber bleibt Glaube, Hoffnung, Liebe, diese drei; aber die Liebe ist die größte unter ihnen.", r: "1. Korinther 13,13", k: "Glaube" },
+  { t: "Wir wissen aber, daß denen, die Gott lieben, alle Dinge zum Besten dienen.", r: "Römer 8,28", k: "Trost" }
 ];
+
+// Morgens den Morgensegen, abends den Abendsegen aufklappen
+const hour = new Date().getHours();
+document.getElementById(hour >= 4 && hour < 15 ? "morning" : "evening").open = true;
+
+// Meine Anliegen: nur im Browser dieses Geräts gespeichert
+const REQ_KEY = "stille-zeit-anliegen";
+let reqs = [];
+try { reqs = JSON.parse(localStorage.getItem(REQ_KEY)) || []; } catch (e) { reqs = []; }
+function saveReqs() { try { localStorage.setItem(REQ_KEY, JSON.stringify(reqs)); } catch (e) {} }
+function renderReqs() {
+  const list = document.getElementById("reqList");
+  list.innerHTML = "";
+  document.getElementById("reqEmpty").hidden = reqs.length > 0;
+  reqs.forEach((r, i) => {
+    const li = document.createElement("li");
+    if (r.done) li.className = "done";
+    const txt = document.createElement("span"); txt.className = "txt"; txt.textContent = r.t;
+    const d = document.createElement("span"); d.className = "date";
+    d.textContent = new Date(r.d).toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" }) + (r.done ? " · erhört" : "");
+    txt.appendChild(d);
+    const mark = document.createElement("button"); mark.type = "button"; mark.className = "mark";
+    mark.textContent = r.done ? "✓ Erhört" : "Erhört";
+    mark.setAttribute("aria-pressed", String(!!r.done));
+    mark.addEventListener("click", () => { reqs[i].done = !reqs[i].done; saveReqs(); renderReqs(); });
+    const del = document.createElement("button"); del.type = "button"; del.className = "del";
+    del.textContent = "Löschen"; del.setAttribute("aria-label", "Anliegen löschen");
+    del.addEventListener("click", () => { reqs.splice(i, 1); saveReqs(); renderReqs(); });
+    li.append(txt, mark, del); list.appendChild(li);
+  });
+}
+document.getElementById("reqForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const input = document.getElementById("reqInput");
+  const t = input.value.trim();
+  if (!t) return;
+  reqs.unshift({ t, d: Date.now(), done: false });
+  input.value = ""; saveReqs(); renderReqs();
+});
+renderReqs();
 
 // Wort für heute: nach Datum gewählt, damit es den ganzen Tag gleich bleibt
 const now = new Date();
