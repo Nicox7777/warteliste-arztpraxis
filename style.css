@@ -1,34 +1,72 @@
-:root {
-    --bg: #f0f6fb; --surface: #ffffff; --fg: #142433; --muted: #5b6f80;
-    --accent: #1f6fb2; --accent-fg: #ffffff; --line: #d6e3ee; --item: #e3f0fa;
-    --font-display: "Space Grotesk", system-ui, sans-serif;
-    --font-body: "Inter", system-ui, sans-serif;
-}
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg: #0f1a24; --surface: #16242f; --fg: #e4eef6; --muted: #93a8b9;
-        --accent: #5aa7e6; --accent-fg: #0b1620; --line: #263a4a; --item: #1c3142;
-        color-scheme: dark;
-    }
-}
+*, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
-body {
-    margin: 0; background: var(--bg); color: var(--fg);
-    font-family: var(--font-body); font-size: 16px; line-height: 1.5;
-    padding: 40px 16px;
+body { margin: 0; }
+/* Layout: eine ruhige Lesespalte – Wort des Tages, Stille, Gebete, Bibeltexte */
+:root {
+  --bg: #eef1ee; --surface: #f8faf7; --fg: #1d2b2a; --muted: #5d6c69;
+  --accent: #3a5a8c; --accent-soft: #dfe6ef; --line: #d3dbd6;
+  --font-scripture: "EB Garamond", Georgia, "Times New Roman", serif;
+  --font-ui: "Figtree", system-ui, sans-serif;
 }
-main { max-width: 560px; margin: 0 auto; display: grid; gap: 28px; }
-h1, h2 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
-h1 { font-size: 1.9rem; line-height: 1.2; }
-h2 { font-size: 1.2rem; display: flex; align-items: baseline; gap: 10px; }
-.count { font-family: var(--font-body); font-size: .85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-.lead { margin: 8px 0 0; color: var(--muted); }
-form { display: flex; flex-wrap: wrap; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
-label { flex-basis: 100%; font-size: .8rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
-input { flex: 1 1 200px; min-width: 0; padding: 12px; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; }
-button { padding: 12px 20px; font: inherit; font-weight: 600; color: var(--accent-fg); background: var(--accent); border: 0; border-radius: 6px; cursor: pointer; }
-input:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-ol { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; counter-reset: pos; }
-li { counter-increment: pos; display: flex; gap: 14px; align-items: center; background: var(--item); padding: 12px 14px; border-radius: 6px; overflow-wrap: anywhere; }
-li::before { content: counter(pos); font-family: var(--font-display); font-weight: 600; color: var(--accent); min-width: 1.5em; font-variant-numeric: tabular-nums; }
-.empty { color: var(--muted); margin: 12px 0 0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121a1c; --surface: #192326; --fg: #e3e9e6; --muted: #98a6a3;
+  --accent: #9db6dd; --accent-soft: #223142; --line: #2a3739; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121a1c; --surface: #192326; --fg: #e3e9e6; --muted: #98a6a3;
+  --accent: #9db6dd; --accent-soft: #223142; --line: #2a3739; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--font-ui); font-size: 16px; line-height: 1.6;
+  padding-block: 48px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width: 620px; margin: 0 auto; display: grid; gap: 56px; }
+h1, h2 { font-family: var(--font-scripture); font-weight: 500; margin: 0; text-wrap: balance; }
+h1 { font-size: 2.6rem; line-height: 1.1; }
+h2 { font-size: 1.7rem; line-height: 1.2; }
+.eyebrow { font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+.intro { color: var(--muted); margin: 10px 0 0; max-width: 52ch; }
+section > p.lead { color: var(--muted); margin: 6px 0 20px; }
+blockquote { margin: 0; font-family: var(--font-scripture); }
+cite { display: block; font-family: var(--font-ui); font-style: normal; font-size: .85rem; font-weight: 500; color: var(--muted); margin-top: 10px; letter-spacing: .02em; }
+
+/* Wort des Tages */
+.daily { padding-block: 8px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 32px 0; }
+.daily blockquote p { font-size: 1.65rem; line-height: 1.4; margin: 0; text-wrap: pretty; }
+.daily .row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+.daily cite { margin: 0; }
+
+button { font: inherit; font-weight: 500; cursor: pointer; border-radius: 999px; padding: 9px 18px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--fg); }
+button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Stille */
+.silence { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 28px 20px; display: grid; justify-items: center; gap: 20px; text-align: center; }
+.breath { width: 180px; height: 180px; max-width: 100%; border-radius: 50%; display: grid; place-items: center; position: relative; }
+.breath::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--accent-soft); transform: scale(.82); transition: transform 1s; }
+.breath.running::before { animation: breathe 10s ease-in-out infinite; }
+@keyframes breathe { 0%,100% { transform: scale(.72); } 50% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .breath.running::before { animation: none; transform: scale(.9); } }
+.time { position: relative; font-family: var(--font-scripture); font-size: 2.6rem; font-variant-numeric: tabular-nums; }
+.hint { position: relative; display: block; font-size: .8rem; color: var(--muted); min-height: 1.3em; }
+.durations { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.silence .verse { font-family: var(--font-scripture); font-style: italic; color: var(--muted); margin: 0; max-width: 40ch; }
+
+/* Gebete */
+.prayers { display: grid; gap: 10px; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+summary { cursor: pointer; padding: 16px 18px; font-weight: 600; display: flex; justify-content: space-between; gap: 12px; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; color: var(--accent); font-weight: 400; font-size: 1.2rem; line-height: 1; }
+details[open] summary::after { content: "–"; }
+summary small { font-weight: 400; color: var(--muted); }
+.prayer { padding: 0 18px 20px; font-family: var(--font-scripture); font-size: 1.2rem; line-height: 1.6; }
+.prayer p { margin: 0 0 .7em; }
+
+/* Bibeltexte */
+.verses { display: grid; gap: 0; }
+.verses blockquote { padding: 20px 0; border-top: 1px solid var(--line); }
+.verses blockquote:last-child { border-bottom: 1px solid var(--line); }
+.verses p { font-size: 1.3rem; line-height: 1.5; margin: 0; }
+.tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+
+footer { color: var(--muted); font-size: .8rem; text-align: center; }

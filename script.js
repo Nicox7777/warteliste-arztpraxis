@@ -1,22 +1,96 @@
-const patientList = document.getElementById("patientList");
-const nameInput = document.getElementById("nameInput");
+const VERSES = [
+  { t: "Kommet her zu mir alle, die ihr mühselig und beladen seid; ich will euch erquicken.", r: "Matthäus 11,28", k: "Trost" },
+  { t: "Fürchte dich nicht, ich bin mit dir; weiche nicht, denn ich bin dein Gott; ich stärke dich, ich helfe dir auch.", r: "Jesaja 41,10", k: "Trost" },
+  { t: "Den Frieden lasse ich euch, meinen Frieden gebe ich euch. Nicht gebe ich euch, wie die Welt gibt. Euer Herz erschrecke nicht und fürchte sich nicht.", r: "Johannes 14,27", k: "Frieden" },
+  { t: "Meine Seele ist stille zu Gott, der mir hilft.", r: "Psalm 62,2", k: "Stille" },
+  { t: "Durch Stillesein und Hoffen würdet ihr stark sein.", r: "Jesaja 30,15", k: "Stille" },
+  { t: "Und nach dem Feuer kam ein stilles, sanftes Sausen.", r: "1. Könige 19,12", k: "Stille" },
+  { t: "Seid stille und erkennet, daß ich Gott bin!", r: "Psalm 46,11", k: "Stille" },
+  { t: "Die Güte des HERRN ist's, daß wir nicht gar aus sind; seine Barmherzigkeit hat noch kein Ende, sondern sie ist alle Morgen neu, und deine Treue ist groß.", r: "Klagelieder 3,22–23", k: "Dank" },
+  { t: "Sorget nichts! sondern in allen Dingen lasset eure Bitten im Gebet und Flehen mit Danksagung vor Gott kund werden.", r: "Philipper 4,6", k: "Gebet" },
+  { t: "Und der Friede Gottes, welcher höher ist denn alle Vernunft, bewahre eure Herzen und Sinne in Christo Jesu.", r: "Philipper 4,7", k: "Frieden" },
+  { t: "Von allen Seiten umgibst du mich und hältst deine Hand über mir.", r: "Psalm 139,5", k: "Trost" },
+  { t: "Danket dem HERRN; denn er ist freundlich, und seine Güte währet ewiglich.", r: "Psalm 106,1", k: "Dank" },
+  { t: "Bittet, so wird euch gegeben; suchet, so werdet ihr finden; klopfet an, so wird euch aufgetan.", r: "Matthäus 7,7", k: "Gebet" }
+];
 
-function update() {
-    const n = patientList.children.length;
-    document.getElementById("count").textContent = n + (n === 1 ? " Person" : " Personen");
-    document.getElementById("empty").hidden = n > 0;
+// Wort für heute: nach Datum gewählt, damit es den ganzen Tag gleich bleibt
+const now = new Date();
+document.getElementById("today").textContent = now.toLocaleDateString("de-DE", { weekday: "long", day: "numeric", month: "long" });
+let dailyIdx = Math.floor(now.getTime() / 86400000 + 0) % VERSES.length;
+function showDaily() {
+  document.getElementById("dailyText").textContent = "„" + VERSES[dailyIdx].t + "“";
+  document.getElementById("dailyRef").textContent = VERSES[dailyIdx].r;
 }
+document.getElementById("nextVerse").addEventListener("click", () => { dailyIdx = (dailyIdx + 1) % VERSES.length; showDaily(); });
+showDaily();
 
-document.getElementById("addForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const name = nameInput.value.trim();
-    if (name === "") return;
+// Bibeltexte mit Themenfilter
+const topics = ["Alle", ...new Set(VERSES.map(v => v.k))];
+let topic = "Alle";
+const tagsEl = document.getElementById("tags");
+function renderVerses() {
+  tagsEl.innerHTML = "";
+  topics.forEach(k => {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = k; b.setAttribute("aria-pressed", String(k === topic));
+    b.addEventListener("click", () => { topic = k; renderVerses(); });
+    tagsEl.appendChild(b);
+  });
+  const list = document.getElementById("verseList");
+  list.innerHTML = "";
+  VERSES.filter(v => topic === "Alle" || v.k === topic).forEach(v => {
+    const q = document.createElement("blockquote");
+    const p = document.createElement("p"); p.textContent = v.t;
+    const c = document.createElement("cite"); c.textContent = v.r + " · " + v.k;
+    q.append(p, c); list.appendChild(q);
+  });
+}
+renderVerses();
 
-    const li = document.createElement("li");
-    li.textContent = name;
-    patientList.appendChild(li);
-    nameInput.value = "";
-    update();
+// Stille-Timer
+let minutes = 3, remaining = 180, timer = null, audio = null, wakeLock = null;
+const timeEl = document.getElementById("time"), hintEl = document.getElementById("hint");
+const breathEl = document.getElementById("breath"), startBtn = document.getElementById("startBtn");
+const fmt = s => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+
+function bell() {
+  try {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    [528, 792].forEach((f, i) => {
+      const o = audio.createOscillator(), g = audio.createGain();
+      o.frequency.value = f; o.type = "sine";
+      g.gain.setValueAtTime(0.0001, audio.currentTime);
+      g.gain.exponentialRampToValueAtTime(i ? 0.05 : 0.15, audio.currentTime + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 4);
+      o.connect(g).connect(audio.destination); o.start(); o.stop(audio.currentTime + 4.2);
+    });
+  } catch (e) {}
+}
+function stop(done) {
+  clearInterval(timer); timer = null;
+  breathEl.classList.remove("running");
+  startBtn.textContent = "Stille beginnen";
+  if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }
+  if (done) { bell(); hintEl.textContent = "Amen"; remaining = minutes * 60; timeEl.textContent = fmt(remaining); }
+  else { remaining = minutes * 60; timeEl.textContent = fmt(remaining); hintEl.textContent = "bereit"; }
+}
+startBtn.addEventListener("click", async () => {
+  if (timer) { stop(false); return; }
+  remaining = minutes * 60; timeEl.textContent = fmt(remaining);
+  bell(); breathEl.classList.add("running"); hintEl.textContent = "einatmen · ausatmen";
+  startBtn.textContent = "Beenden";
+  try { wakeLock = await navigator.wakeLock?.request("screen"); } catch (e) {}
+  const end = Date.now() + remaining * 1000;
+  timer = setInterval(() => {
+    remaining = Math.max(0, Math.round((end - Date.now()) / 1000));
+    timeEl.textContent = fmt(remaining);
+    if (remaining === 0) stop(true);
+  }, 250);
 });
-
-update();
+document.querySelectorAll(".durations button").forEach(b => b.addEventListener("click", () => {
+  if (timer) return;
+  minutes = Number(b.dataset.min);
+  document.querySelectorAll(".durations button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  remaining = minutes * 60; timeEl.textContent = fmt(remaining); hintEl.textContent = "bereit";
+}));
