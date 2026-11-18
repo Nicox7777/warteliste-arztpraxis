@@ -2,19 +2,125 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Warteliste Arztpraxis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Stille Zeit</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Figtree:wght@400;500;600&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<main>
+  <header>
+    <p class="eyebrow">Glaube · Bibel · Gebet</p>
+    <h1>Stille Zeit</h1>
+    <p class="intro">Ein Ort zum Innehalten. Lesen Sie ein Wort aus der Bibel, beten Sie oder bleiben Sie einfach ein paar Minuten still vor Gott.</p>
+  </header>
 
-<h1>Digitale Warteliste – Bitte Namen eintragen</h1>
+  <section class="daily" aria-labelledby="daily-h">
+    <p class="eyebrow" id="daily-h">Wort für heute · <span id="today"></span></p>
+    <blockquote>
+      <p id="dailyText"></p>
+      <div class="row">
+        <cite id="dailyRef"></cite>
+        <button id="nextVerse" type="button">Anderes Wort</button>
+      </div>
+    </blockquote>
+  </section>
 
-<input type="text" id="nameInput" placeholder="Ihr Name">
-<button onclick="addPatient()">Eintragen</button>
+  <section aria-labelledby="silence-h">
+    <h2 id="silence-h">Stille</h2>
+    <p class="lead">Wählen Sie eine Dauer. Ein leiser Ton markiert Anfang und Ende. Atmen Sie mit dem Kreis.</p>
+    <div class="silence">
+      <div class="durations" role="group" aria-label="Dauer der Stille">
+        <button type="button" data-min="1">1 Min.</button>
+        <button type="button" data-min="3" aria-pressed="true">3 Min.</button>
+        <button type="button" data-min="5">5 Min.</button>
+        <button type="button" data-min="10">10 Min.</button>
+      </div>
+      <div class="breath" id="breath">
+        <div><span class="time" id="time">3:00</span><span class="hint" id="hint">bereit</span></div>
+      </div>
+      <button class="primary" id="startBtn" type="button">Stille beginnen</button>
+      <p class="verse">„Seid stille und erkennet, daß ich Gott bin!“ – Psalm 46,11</p>
+    </div>
+  </section>
 
-<h2>Warteliste</h2>
-<ul id="patientList"></ul>
+  <section aria-labelledby="prayer-h">
+    <h2 id="prayer-h">Gebete</h2>
+    <p class="lead">Worte, die Christen seit Generationen beten.</p>
+    <div class="prayers">
+      <details id="morning">
+        <summary><span>Morgensegen <small>· Martin Luther</small></span></summary>
+        <div class="prayer">
+          <p>Ich danke dir, mein himmlischer Vater, durch Jesus Christus, deinen lieben Sohn, dass du mich diese Nacht vor allem Schaden und Gefahr behütet hast, und bitte dich, du wollest mich diesen Tag auch behüten vor Sünden und allem Übel, dass dir all mein Tun und Leben gefalle.</p>
+          <p>Denn ich befehle mich, meinen Leib und Seele und alles in deine Hände. Dein heiliger Engel sei mit mir, dass der böse Feind keine Macht an mir finde. Amen.</p>
+        </div>
+      </details>
+      <details id="evening">
+        <summary><span>Abendsegen <small>· Martin Luther</small></span></summary>
+        <div class="prayer">
+          <p>Ich danke dir, mein himmlischer Vater, durch Jesus Christus, deinen lieben Sohn, dass du mich diesen Tag gnädiglich behütet hast, und bitte dich, du wollest mir vergeben alle meine Sünde, wo ich Unrecht getan habe, und mich diese Nacht auch gnädiglich behüten.</p>
+          <p>Denn ich befehle mich, meinen Leib und Seele und alles in deine Hände. Dein heiliger Engel sei mit mir, dass der böse Feind keine Macht an mir finde. Amen.</p>
+        </div>
+      </details>
+      <details>
+        <summary><span>Vaterunser <small>· Matthäus 6</small></span></summary>
+        <div class="prayer">
+          <p>Vater unser im Himmel,<br>geheiligt werde dein Name.<br>Dein Reich komme.<br>Dein Wille geschehe,<br>wie im Himmel, so auf Erden.</p>
+          <p>Unser tägliches Brot gib uns heute.<br>Und vergib uns unsere Schuld,<br>wie auch wir vergeben unsern Schuldigern.<br>Und führe uns nicht in Versuchung,<br>sondern erlöse uns von dem Bösen.</p>
+          <p>Denn dein ist das Reich und die Kraft<br>und die Herrlichkeit in Ewigkeit.<br>Amen.</p>
+        </div>
+      </details>
+      <details>
+        <summary><span>Psalm 23 <small>· Der gute Hirte</small></span></summary>
+        <div class="prayer">
+          <p>Der HERR ist mein Hirte; mir wird nichts mangeln.<br>Er weidet mich auf einer grünen Aue und führet mich zum frischen Wasser.<br>Er erquicket meine Seele; er führet mich auf rechter Straße um seines Namens willen.</p>
+          <p>Und ob ich schon wanderte im finstern Tal, fürchte ich kein Unglück; denn du bist bei mir, dein Stecken und Stab trösten mich.</p>
+          <p>Du bereitest vor mir einen Tisch im Angesicht meiner Feinde. Du salbest mein Haupt mit Öl und schenkest mir voll ein.<br>Gutes und Barmherzigkeit werden mir folgen mein Leben lang, und ich werde bleiben im Hause des HERRN immerdar.</p>
+        </div>
+      </details>
+      <details>
+        <summary><span>Gebet um Gelassenheit</span></summary>
+        <div class="prayer">
+          <p>Gott, gib mir die Gelassenheit,<br>Dinge hinzunehmen, die ich nicht ändern kann,<br>den Mut, Dinge zu ändern, die ich ändern kann,<br>und die Weisheit, das eine vom anderen zu unterscheiden.</p>
+        </div>
+      </details>
+      <details>
+        <summary><span>Gebet in der Stille</span></summary>
+        <div class="prayer">
+          <p>Herr, ich bin hier.<br>Mit allem, was mich heute bewegt,<br>mit dem, was gelungen ist, und dem, was schwer war.</p>
+          <p>Ich lege es in deine Hände.<br>Mach mich still, damit ich dich höre.<br>Amen.</p>
+        </div>
+      </details>
+      <details>
+        <summary><span>Segen <small>· 4. Mose 6,24–26</small></span></summary>
+        <div class="prayer">
+          <p>Der HERR segne dich und behüte dich;<br>der HERR lasse sein Angesicht leuchten über dir und sei dir gnädig;<br>der HERR hebe sein Angesicht über dich und gebe dir Frieden.</p>
+        </div>
+      </details>
+    </div>
+  </section>
 
+  <section aria-labelledby="req-h">
+    <h2 id="req-h">Meine Anliegen</h2>
+    <p class="lead">Schreiben Sie auf, wofür Sie beten möchten. Die Einträge bleiben nur auf diesem Gerät und sind für niemanden sonst sichtbar.</p>
+    <form class="req-form" id="reqForm">
+      <label for="reqInput" class="sr">Neues Anliegen</label>
+      <input type="text" id="reqInput" placeholder="z. B. Für meine Mutter, die im Krankenhaus liegt" maxlength="200">
+      <button class="primary" type="submit">Hinzufügen</button>
+    </form>
+    <p class="req-empty" id="reqEmpty">Noch keine Anliegen. Ihr erstes Anliegen erscheint hier.</p>
+    <ul class="req-list" id="reqList"></ul>
+  </section>
+
+  <section aria-labelledby="verses-h">
+    <h2 id="verses-h">Bibeltexte</h2>
+    <p class="lead">Worte für Zeiten der Sorge, der Müdigkeit und der Dankbarkeit.</p>
+    <div class="tags" role="group" aria-label="Thema wählen" id="tags"></div>
+    <div class="verses" id="verseList"></div>
+  </section>
+
+  <footer>Bibeltexte nach der Lutherbibel 1912.</footer>
+</main>
 <script src="script.js"></script>
 </body>
 </html>
